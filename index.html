@@ -3,33 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>譚久平 - 個人簡歷</title>
+    <title>譚久平個人簡歷</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #1a1a1a; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; }
         .text-accent { color: #2dd4bf; }
         .bg-accent { background-color: #2dd4bf; }
         .border-accent { border-color: #2dd4bf; }
-        [contenteditable]:focus { outline: 2px solid #2dd4bf; padding: 2px; border-radius: 4px; background: rgba(255,255,255,0.05); }
+        [contenteditable]:focus { outline: 2px solid #2dd4bf; padding: 4px; border-radius: 4px; background: rgba(255,255,255,0.05); }
+        .photo-preview { width: 128px; height: 128px; border-radius: 9999px; background-size: cover; background-position: center; border: 4px solid rgba(255,255,255,0.2); }
     </style>
 </head>
 <body class="p-4 md:p-10">
     <div class="max-w-4xl mx-auto bg-[#262626] rounded-xl shadow-2xl overflow-hidden">
-        <!-- Header -->
-        <div class="bg-gradient-to-r from-[#113f39] to-[#3a1a2b] p-8 text-white flex flex-col md:flex-row items-center gap-6">
-            <div class="w-32 h-32 bg-gray-400 rounded-full border-4 border-white/20"></div>
-            <div>
+        
+        <div class="p-8 flex flex-col md:flex-row gap-8 items-start justify-between">
+            <!-- 左側個人資料 -->
+            <div contenteditable="true" class="w-full space-y-4">
                 <h1 class="text-4xl font-bold">譚久平</h1>
-                <p class="text-xl text-accent mt-1">電子廠品管 / AI 應用專家</p>
-                <div class="flex gap-4 mt-4 text-sm opacity-80">
-                    <span>📍 桃園市桃園區</span>
-                    <span>🎓 商信家商 - 餐旅</span>
+                <p class="text-xl text-accent font-medium">電子廠品管 / AI 應用專家</p>
+                <div class="text-sm opacity-80 space-y-1">
+                    <p>📍 桃園市桃園區民光東路184號3樓</p>
+                    <p>🎓 商信家商 - 餐旅</p>
+                </div>
+            </div>
+
+            <!-- 右上方照片區 -->
+            <div class="flex-shrink-0 flex flex-col items-center gap-3">
+                <div id="photoPreview" class="photo-preview bg-gray-700" style="background-image: url('man01.jpg');"></div>
+                
+                <div class="flex gap-2">
+                    <label class="text-xs bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded cursor-pointer transition text-white">
+                        切換照片
+                        <input type="file" class="hidden" accept="image/*" onchange="previewFile(this)">
+                    </label>
+                    <button onclick="removePhoto()" class="text-xs bg-red-900/50 hover:bg-red-800 px-3 py-1.5 rounded transition text-white">
+                        移除
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Left Column: Experience -->
+        <div class="p-8 pt-0 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Left Column -->
             <div class="md:col-span-2">
                 <h2 class="text-2xl font-bold text-accent mb-6">工作經驗</h2>
                 <div class="relative border-l-2 border-accent pl-6 space-y-8" contenteditable="true">
@@ -39,64 +55,57 @@
                         <p class="text-sm opacity-60">2005 - 2025</p>
                         <p class="mt-2 text-sm">長期深耕業務領域，具備優秀的銷售介紹產品能力與客戶應對經驗。</p>
                     </div>
-                    <!-- 可在此新增更多經歷 -->
-                    <div class="relative border-t border-dashed border-gray-600 pt-4">
-                        <h3 class="text-accent italic">+ 點擊此處新增職務名稱</h3>
-                        <p class="text-sm opacity-50">起訖時間</p>
-                        <p class="text-sm">工作內容描述...</p>
-                    </div>
                 </div>
 
-                <h2 class="text-2xl font-bold text-accent mt-12 mb-6">技能擴充</h2>
+                <h2 class="text-2xl font-bold text-accent mt-12 mb-6">其他資訊</h2>
                 <div class="bg-black/20 p-4 rounded-lg" contenteditable="true">
                     <ul class="list-disc pl-5 space-y-2 text-sm">
                         <li>美髮證照丙級</li>
                         <li>中餐廚師證照丙級</li>
-                        <li>點擊此處輸入更多技能...</li>
+                        <li>生成式 AI 應用專家</li>
+                        <li>數據處理與自動化</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Right Column: Skills & Info -->
+            <!-- Right Column -->
             <div class="space-y-8">
                 <div>
                     <h2 class="text-xl font-bold text-accent mb-4">聯絡方法</h2>
                     <div class="text-sm space-y-2" contenteditable="true">
                         <p>📞 0926-891-609</p>
                         <p class="break-all">✉️ Tanjiuping0225@gmail.com</p>
-                        <p class="text-accent italic">+ 點擊此處新增聯絡方式</p>
                     </div>
                 </div>
 
                 <div>
                     <h2 class="text-xl font-bold text-accent mb-4">核心專業</h2>
                     <div class="space-y-4" contenteditable="true">
-                        <div>
-                            <p class="text-xs mb-1">生成式 AI 應用</p>
-                            <div class="w-full bg-black/30 h-2 rounded-full"><div class="bg-accent h-2 rounded-full w-[90%]"></div></div>
-                        </div>
-                        <div>
-                            <p class="text-xs mb-1">數據處理與自動化</p>
-                            <div class="w-full bg-black/30 h-2 rounded-full"><div class="bg-accent h-2 rounded-full w-[85%]"></div></div>
-                        </div>
-                        <div>
-                            <p class="text-xs mb-1">雲端協作管理</p>
-                            <div class="w-full bg-black/30 h-2 rounded-full"><div class="bg-accent h-2 rounded-full w-[95%]"></div></div>
-                        </div>
-                        <p class="text-xs text-accent italic">+ 點擊此處新增專業技能</p>
+                        <div><p class="text-xs mb-1">生成式 AI 應用</p><div class="w-full bg-black/30 h-2 rounded-full"><div class="bg-accent h-2 rounded-full w-[90%]"></div></div></div>
+                        <div><p class="text-xs mb-1">數據處理與自動化</p><div class="w-full bg-black/30 h-2 rounded-full"><div class="bg-accent h-2 rounded-full w-[85%]"></div></div></div>
                     </div>
-                </div>
-
-                <div>
-                    <h2 class="text-xl font-bold text-accent mb-4">語言能力</h2>
-                    <ul class="text-sm space-y-2" contenteditable="true">
-                        <li>中文 ●●●●●</li>
-                        <li>英文 ●●○○○</li>
-                        <li class="text-accent italic">+ 點擊此處新增語言</li>
-                    </ul>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function previewFile(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('photoPreview');
+                    preview.style.backgroundImage = `url('${e.target.result}')`;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removePhoto() {
+            const preview = document.getElementById('photoPreview');
+            preview.style.backgroundImage = 'none';
+        }
+    </script>
 </body>
 </html>
