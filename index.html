@@ -23,14 +23,13 @@
             <!-- 左側個人資料 -->
             <div contenteditable="true" class="w-full space-y-4">
                 <h1 class="text-4xl font-bold">譚久平</h1>
-                <!-- 移除原有的職稱行 -->
                 <div class="text-sm opacity-80 space-y-1">
                     <p>📍 桃園市桃園區民光東路184號3樓</p>
                     <p>🎓 商信家商 - 餐旅</p>
                 </div>
             </div>
 
-            <!-- 右上方照片區 (固定顯示) -->
+            <!-- 右上方照片區 -->
             <div class="flex-shrink-0">
                 <div class="photo-preview bg-gray-700" style="background-image: url('https://tanjiuping0225-prog.github.io/portfolio/man01.png');"></div>
             </div>
@@ -50,9 +49,21 @@
                 </div>
 
                 <h2 class="text-2xl font-bold text-accent mt-12 mb-6">專業證照</h2>
+                <!-- 若要增加證照，請複製下方的 div 區塊 -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <img src="excel.jpg" alt="Excel 專家證書" class="cert-img">
-                    <img src="word.jpg" alt="Word 專家證書" class="cert-img">
+                    <div class="group cursor-pointer">
+                        <img src="excel.jpg" alt="Excel 專家證書" class="cert-img">
+                        <p class="text-xs text-center mt-2 opacity-70">Excel 專家證書</p>
+                    </div>
+                    <div class="group cursor-pointer">
+                        <img src="word.jpg" alt="Word 專家證書" class="cert-img">
+                        <p class="text-xs text-center mt-2 opacity-70">Word 專家證書</p>
+                    </div>
+                    <div class="group cursor-pointer">
+                        <img src="https://tanjiuping0225-prog.github.io/portfolio/111.jpg" alt="其他證照" class="cert-img">
+                        <p class="text-xs text-center mt-2 opacity-70">其他證照</p>
+                    </div>
+                    <!-- 在此貼上新的證照區塊 -->
                 </div>
 
                 <h2 class="text-2xl font-bold text-accent mt-12 mb-6">其他資訊</h2>
