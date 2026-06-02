@@ -17,57 +17,64 @@
     </style>
 </head>
 <body class="p-4 md:p-10">
-    <div class="max-w-4xl mx-auto bg-[#262626] rounded-xl shadow-2xl overflow-hidden">
+    <div class="max-w-4xl mx-auto bg-[#262626] rounded-xl shadow-2xl overflow-hidden p-8">
         
-        <div class="p-8 flex flex-col md:flex-row gap-8 items-start justify-between">
-            <!-- 左側個人資料 -->
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row gap-8 items-start justify-between mb-8">
             <div contenteditable="true" class="w-full space-y-4">
                 <h1 class="text-4xl font-bold">譚久平</h1>
                 <div class="text-sm opacity-80 space-y-1">
-                    <p>📍 桃園市桃園區民光東路184號3樓</p>
+                    <p>📍 桃園市桃園區民光東路184號</p>
                     <p>🎓 商信家商 - 餐旅</p>
                 </div>
             </div>
-
-            <!-- 右上方照片區 -->
             <div class="flex-shrink-0">
                 <div class="photo-preview bg-gray-700" style="background-image: url('https://tanjiuping0225-prog.github.io/portfolio/man01.png');"></div>
             </div>
         </div>
 
-        <div class="p-8 pt-0 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Left Column -->
-            <div class="md:col-span-2">
-                <h2 class="text-2xl font-bold text-accent mb-6">工作經驗</h2>
-                <div class="relative border-l-2 border-accent pl-6 space-y-8" contenteditable="true">
-                    <div class="relative">
-                        <div class="absolute -left-[33px] w-4 h-4 rounded-full bg-accent"></div>
-                        <h3 class="font-bold">仲介業務</h3>
-                        <p class="text-sm opacity-60">2005 - 2025</p>
-                        <p class="mt-2 text-sm">長期深耕業務領域，具備優秀的銷售介紹產品能力與客戶應對經驗。</p>
+            <div class="md:col-span-2 space-y-12">
+                <div>
+                    <h2 class="text-2xl font-bold text-accent mb-6">工作經驗</h2>
+                    <div class="relative border-l-2 border-accent pl-6 space-y-4" contenteditable="true">
+                        <div class="relative">
+                            <div class="absolute -left-[33px] w-4 h-4 rounded-full bg-accent"></div>
+                            <p class="leading-relaxed">電腦主機工廠 : 組裝機板生產線品管兩年經歷，認識每個零件及反面的電路板路線。<br>
+                            <span class="font-bold text-white">中餐廳工作經歷兩年熟悉各項流程</span><br>
+                            <span class="font-bold text-white">仲介業務超過10年</span><br>
+                            長期深耕業務領域，具備優秀的銷售介紹產品能力與客戶應對經驗。</p>
+                        </div>
                     </div>
                 </div>
 
-                <h2 class="text-2xl font-bold text-accent mt-12 mb-6">自傳</h2>
-                <div contenteditable="true" class="bg-black/20 p-6 rounded-lg text-sm leading-relaxed opacity-80">
-                    <p>請在此處輸入您的自傳內容。您可以描述您的職涯經歷、對工作的熱忱以及未來的目標。這是一個可編輯的區域，方便您隨時修改與更新。</p>
+                <div>
+                    <h2 class="text-2xl font-bold text-accent mb-6">自傳</h2>
+                    <div contenteditable="true" class="bg-black/20 p-6 rounded-lg text-sm leading-relaxed opacity-80">
+                        <p>我對電腦的組裝流程很熟悉，做了好幾年結婚才離職。後面開了中餐廳因為豬瘟的關係才收店，仲介的經歷是最長的做了10幾年。我適合應對各種客人。</p>
+                    </div>
                 </div>
 
-                <h2 class="text-2xl font-bold text-accent mt-12 mb-6">專業證照</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <img src="https://tanjiuping0225-prog.github.io/portfolio/excel.jpg" alt="Excel 專家證書" class="cert-img">
-                    <img src="https://tanjiuping0225-prog.github.io/portfolio/word.jpg" alt="Word 專家證書" class="cert-img">
-                    <img src="https://tanjiuping0225-prog.github.io/portfolio/111.jpg" alt="其他證照" class="cert-img">
+                <div>
+                    <h2 class="text-2xl font-bold text-accent mb-6">專業證照</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <img src="https://tanjiuping0225-prog.github.io/portfolio/excel.jpg" alt="Excel 專家證書" class="cert-img">
+                        <img src="https://tanjiuping0225-prog.github.io/portfolio/word.jpg" alt="Word 專家證書" class="cert-img">
+                        <img src="https://tanjiuping0225-prog.github.io/portfolio/111.jpg" alt="證照" class="cert-img">
+                    </div>
                 </div>
 
-                <h2 class="text-2xl font-bold text-accent mt-12 mb-6">其他資訊</h2>
-                <div class="bg-black/20 p-4 rounded-lg" contenteditable="true">
-                    <ul class="list-disc pl-5 space-y-2 text-sm">
-                        <li>美髮證照丙級</li>
-                        <li>中餐廚師證照丙級</li>
-                        <li>生成式 AI 應用專家</li>
-                        <li>數據處理與自動化</li>
-                    </ul>
+                <div>
+                    <h2 class="text-2xl font-bold text-accent mb-6">其他資訊</h2>
+                    <div class="bg-black/20 p-6 rounded-lg" contenteditable="true">
+                        <ul class="list-disc pl-5 space-y-2 text-sm">
+                            <li>美髮證照丙級</li>
+                            <li>中餐廚師證照丙級</li>
+                            <li>生成式 AI 應用專家</li>
+                            <li>數據處理與自動化</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
@@ -89,9 +96,8 @@
                     </div>
                 </div>
 
-                <!-- 懸浮動畫入口按鈕 -->
                 <a href="https://course-use-kanban-production-b289.up.railway.app/" target="_blank" 
-                   class="block bg-black/20 p-4 rounded-xl border border-accent/20 transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:-translate-y-1 hover:border-accent hover:shadow-lg hover:shadow-accent/20 group">
+                   class="block bg-black/20 p-4 rounded-xl border border-accent/20 transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:border-accent group">
                     <div class="flex items-center gap-3">
                         <div class="p-2 bg-accent/10 rounded-lg group-hover:bg-accent group-hover:text-black transition-colors duration-300">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
