@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>譚久平個人簡歷</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- PDF 匯出用函式庫（npm 權威路徑，已 pin 版本）。若此 CDN 載入失敗，
+         下方程式會自動改用 unpkg / cdnjs 備援。 -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+
     <style>
         body { background-color: #1a1a1a; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; }
         .text-accent { color: #2dd4bf; }
@@ -14,10 +20,41 @@
         .photo-preview { width: 128px; height: 128px; border-radius: 9999px; background-size: cover; background-position: center; border: 4px solid rgba(255,255,255,0.2); }
         .cert-img { width: 100%; height: auto; border-radius: 8px; border: 2px solid rgba(45, 212, 191, 0.3); transition: transform 0.3s; }
         .cert-img:hover { transform: scale(1.05); }
+
+        /* 下載按鈕 */
+        #downloadPdfBtn {
+            position: fixed; top: 16px; right: 16px; z-index: 50;
+            background: #2dd4bf; color: #0b0b0b; font-weight: 700;
+            border: none; border-radius: 9999px; padding: 10px 18px;
+            cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,.4);
+            font-family: 'Segoe UI', sans-serif; font-size: 14px;
+        }
+        #downloadPdfBtn:hover { filter: brightness(1.08); }
+        #downloadPdfBtn:disabled { opacity: .6; cursor: progress; }
+
+        /* ===== 列印用樣式：給「Ctrl+P → 另存 PDF」這條路用，無須使用者手動勾背景 ===== */
+        @media print {
+            @page { size: A4; margin: 8mm; }
+            html, body { background-color: #1a1a1a !important; }
+            /* 強制印出所有背景與配色（深色底、卡片、青色進度條） */
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            /* 不論紙張寬度，鎖定桌面三欄版面，避免塌成單欄 */
+            .md\:flex-row { flex-direction: row !important; }
+            .md\:grid-cols-3 { display: grid !important; grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
+            .md\:col-span-2 { grid-column: span 2 / span 2 !important; }
+            .md\:p-10 { padding: 0 !important; }
+            /* 避免區塊／證照圖被切到下一頁 */
+            h2, .cert-img, .bg-black\/20, a[href] { break-inside: avoid; }
+            /* 列印時隱藏下載按鈕 */
+            #downloadPdfBtn { display: none !important; }
+        }
     </style>
 </head>
 <body class="p-4 md:p-10">
-    <div class="max-w-4xl mx-auto bg-[#262626] rounded-xl shadow-2xl overflow-hidden p-8">
+
+    <button id="downloadPdfBtn" onclick="exportResumePDF()">📄 下載 PDF</button>
+
+    <div id="resumeCard" class="max-w-4xl mx-auto bg-[#262626] rounded-xl shadow-2xl overflow-hidden p-8">
         
         <!-- Header -->
         <div class="flex flex-col md:flex-row gap-8 items-start justify-between mb-8">
@@ -59,9 +96,9 @@
                 <div>
                     <h2 class="text-2xl font-bold text-accent mb-6">專業證照</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <img src="https://tanjiuping0225-prog.github.io/portfolio/excel.jpg" alt="Excel 專家證書" class="cert-img">
-                        <img src="https://tanjiuping0225-prog.github.io/portfolio/word.jpg" alt="Word 專家證書" class="cert-img">
-                        <img src="https://tanjiuping0225-prog.github.io/portfolio/111.jpg" alt="證照" class="cert-img">
+                        <img src="https://tanjiuping0225-prog.github.io/portfolio/excel.jpg" alt="Excel 專家證書" class="cert-img" crossorigin="anonymous">
+                        <img src="https://tanjiuping0225-prog.github.io/portfolio/word.jpg" alt="Word 專家證書" class="cert-img" crossorigin="anonymous">
+                        <img src="https://tanjiuping0225-prog.github.io/portfolio/111.jpg" alt="證照" class="cert-img" crossorigin="anonymous">
                     </div>
                 </div>
 
@@ -111,5 +148,115 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // 依序嘗試多個 CDN，任一成功即解析；全失敗才 reject
+        function loadScript(urls) {
+            return new Promise((resolve, reject) => {
+                let i = 0;
+                (function tryNext() {
+                    if (i >= urls.length) return reject(new Error('函式庫載入失敗：' + urls.join(' , ')));
+                    const s = document.createElement('script');
+                    s.src = urls[i++];
+                    s.onload = () => resolve();
+                    s.onerror = () => { s.remove(); tryNext(); };
+                    document.head.appendChild(s);
+                })();
+            });
+        }
+
+        // 確保 html2canvas 與 jsPDF 都就緒（head 已先載，這裡是備援）
+        async function ensureLibs() {
+            if (typeof window.html2canvas !== 'function') {
+                await loadScript([
+                    'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+                    'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js',
+                    'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
+                ]);
+            }
+            if (!(window.jspdf && window.jspdf.jsPDF) && !window.jsPDF) {
+                await loadScript([
+                    'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js',
+                    'https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js',
+                    'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+                ]);
+            }
+        }
+
+        // 不論 UMD 把 jsPDF 掛在 window.jspdf.jsPDF 還是 window.jsPDF，都能取到
+        function getJsPDF() {
+            const ctor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+            if (typeof ctor !== 'function') throw new Error('jsPDF 未載入');
+            return ctor;
+        }
+
+        // 等所有 <img> 載入完成（避免截到空白／破圖）
+        function waitForImages(root) {
+            const imgs = Array.from(root.querySelectorAll('img'));
+            return Promise.all(imgs.map(img => {
+                if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+                return new Promise(res => { img.onload = img.onerror = res; });
+            }));
+        }
+
+        async function exportResumePDF() {
+            const btn  = document.getElementById('downloadPdfBtn');
+            const card = document.getElementById('resumeCard');
+            const original = btn.textContent;
+            btn.disabled = true; btn.textContent = '產生中…';
+
+            try {
+                await ensureLibs();   // 確保函式庫就緒（含備援 CDN）
+                // 截圖前：移除編輯游標外框、確保圖片與字型就緒
+                if (document.activeElement) document.activeElement.blur();
+                await (document.fonts ? document.fonts.ready : Promise.resolve());
+                await waitForImages(card);
+
+                const canvas = await html2canvas(card, {
+                    scale: 2,                 // 高解析
+                    backgroundColor: '#1a1a1a',
+                    useCORS: true,
+                    windowWidth: 1100         // 強制以桌面寬度排版 → 永遠三欄，即使在手機上點按鈕
+                });
+
+                const jsPDF = getJsPDF();
+                const imgData = canvas.toDataURL('image/png');
+
+                // === 輸出模式（改這一個字即可切換）===
+                //   'a4-fit' : 單張標準 A4，等比縮放置中，可正常列印／投履歷（預設）
+                //   'exact'  : 單張，頁面尺寸=網頁原樣，零白邊、與螢幕完全等比
+                const PAGE_MODE = 'a4-fit';
+
+                let pdf, x = 0, y = 0, w, h;
+                if (PAGE_MODE === 'exact') {
+                    const orient = canvas.height >= canvas.width ? 'p' : 'l';
+                    pdf = new jsPDF({ orientation: orient, unit: 'px', format: [canvas.width, canvas.height] });
+                    w = canvas.width; h = canvas.height;
+                    pdf.addImage(imgData, 'PNG', 0, 0, w, h);
+                } else {
+                    pdf = new jsPDF('p', 'mm', 'a4');
+                    const pageW = pdf.internal.pageSize.getWidth();   // 210
+                    const pageH = pdf.internal.pageSize.getHeight();  // 297
+                    // 同時受寬與高限制 → 取較小縮放比，保證整份落在「單一頁」
+                    const ratio = Math.min(pageW / canvas.width, pageH / canvas.height);
+                    w = canvas.width * ratio;
+                    h = canvas.height * ratio;
+                    x = (pageW - w) / 2;
+                    y = (pageH - h) / 2;
+                    // 先把整頁填成深色底，縮放後的留白邊才不會是白色
+                    pdf.setFillColor(26, 26, 26); // #1a1a1a
+                    pdf.rect(0, 0, pageW, pageH, 'F');
+                    pdf.addImage(imgData, 'PNG', x, y, w, h);
+                }
+
+                pdf.save('譚久平_個人簡歷.pdf');
+            } catch (err) {
+                console.error(err);
+                alert('PDF 產生失敗，請確認在連網狀態下、且圖片已載入後再試一次。\n錯誤：' + err.message);
+            } finally {
+                btn.disabled = false; btn.textContent = original;
+            }
+        }
+    </script>
 </body>
 </html>
