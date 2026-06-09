@@ -6,46 +6,33 @@
     <title>譚久平個人簡歷</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- PDF 匯出用函式庫（npm 權威路徑，已 pin 版本）。若此 CDN 載入失敗，
-         下方程式會自動改用 unpkg / cdnjs 備援。 -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 
     <style>
-        body { background-color: #1a1a1a; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; }
-        .text-accent { color: #2dd4bf; }
-        .bg-accent { background-color: #2dd4bf; }
-        .border-accent { border-color: #2dd4bf; }
-        [contenteditable]:focus { outline: 2px solid #2dd4bf; padding: 4px; border-radius: 4px; background: rgba(255,255,255,0.05); }
-        .photo-preview { width: 128px; height: 128px; border-radius: 9999px; background-size: cover; background-position: center; border: 4px solid rgba(255,255,255,0.2); }
-        .cert-img { width: 100%; height: auto; border-radius: 8px; border: 2px solid rgba(45, 212, 191, 0.3); transition: transform 0.3s; }
+        body { background-color: #e0f2fe; color: #1f2937; font-family: 'Segoe UI', sans-serif; }
+        .text-accent { color: #0d9488; }
+        .bg-accent { background-color: #0d9488; }
+        .border-accent { border-color: #0d9488; }
+        [contenteditable]:focus { outline: 2px solid #0d9488; padding: 4px; border-radius: 4px; background: rgba(0,0,0,0.05); }
+        .photo-preview { width: 128px; height: 128px; border-radius: 9999px; background-size: cover; background-position: center; border: 4px solid rgba(255,255,255,0.8); }
+        .cert-img { width: 100%; height: auto; border-radius: 8px; border: 2px solid rgba(13, 148, 136, 0.3); transition: transform 0.3s; }
         .cert-img:hover { transform: scale(1.05); }
 
-        /* 下載按鈕 */
         #downloadPdfBtn {
             position: fixed; top: 16px; right: 16px; z-index: 50;
-            background: #2dd4bf; color: #0b0b0b; font-weight: 700;
+            background: #0d9488; color: white; font-weight: 700;
             border: none; border-radius: 9999px; padding: 10px 18px;
-            cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,.4);
+            cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,.1);
             font-family: 'Segoe UI', sans-serif; font-size: 14px;
         }
-        #downloadPdfBtn:hover { filter: brightness(1.08); }
+        #downloadPdfBtn:hover { filter: brightness(1.1); }
         #downloadPdfBtn:disabled { opacity: .6; cursor: progress; }
 
-        /* ===== 列印用樣式：給「Ctrl+P → 另存 PDF」這條路用，無須使用者手動勾背景 ===== */
         @media print {
             @page { size: A4; margin: 8mm; }
-            html, body { background-color: #1a1a1a !important; }
-            /* 強制印出所有背景與配色（深色底、卡片、青色進度條） */
+            body { background-color: white !important; }
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            /* 不論紙張寬度，鎖定桌面三欄版面，避免塌成單欄 */
-            .md\:flex-row { flex-direction: row !important; }
-            .md\:grid-cols-3 { display: grid !important; grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
-            .md\:col-span-2 { grid-column: span 2 / span 2 !important; }
-            .md\:p-10 { padding: 0 !important; }
-            /* 避免區塊／證照圖被切到下一頁 */
-            h2, .cert-img, .bg-black\/20, a[href] { break-inside: avoid; }
-            /* 列印時隱藏下載按鈕 */
             #downloadPdfBtn { display: none !important; }
         }
     </style>
@@ -54,33 +41,31 @@
 
     <button id="downloadPdfBtn" onclick="exportResumePDF()">📄 下載 PDF</button>
 
-    <div id="resumeCard" class="max-w-4xl mx-auto bg-[#262626] rounded-xl shadow-2xl overflow-hidden p-8">
+    <div id="resumeCard" class="max-w-4xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden p-8 border border-gray-200">
         
-        <!-- Header -->
         <div class="flex flex-col md:flex-row gap-8 items-start justify-between mb-8">
             <div contenteditable="true" class="w-full space-y-4">
-                <h1 class="text-4xl font-bold">譚久平</h1>
-                <div class="text-sm opacity-80 space-y-1">
+                <h1 class="text-4xl font-bold text-gray-900">譚久平</h1>
+                <div class="text-sm text-gray-600 space-y-1">
                     <p>📍 桃園市桃園區民光東路184號</p>
                     <p>🎓 商信家商 - 餐旅</p>
                 </div>
             </div>
             <div class="flex-shrink-0">
-                <div class="photo-preview bg-gray-700" style="background-image: url('https://tanjiuping0225-prog.github.io/portfolio/man01.png');"></div>
+                <div class="photo-preview bg-gray-300" style="background-image: url('https://tanjiuping0225-prog.github.io/portfolio/man01.png');"></div>
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Left Column -->
             <div class="md:col-span-2 space-y-12">
                 <div>
                     <h2 class="text-2xl font-bold text-accent mb-6">工作經驗</h2>
                     <div class="relative border-l-2 border-accent pl-6 space-y-4" contenteditable="true">
                         <div class="relative">
                             <div class="absolute -left-[33px] w-4 h-4 rounded-full bg-accent"></div>
-                            <p class="leading-relaxed">電腦主機工廠 : 組裝機板生產線品管兩年經歷，認識每個零件及反面的電路板路線。<br>
-                            <span class="font-bold text-white">中餐廳工作經歷兩年熟悉各項流程</span><br>
-                            <span class="font-bold text-white">仲介業務超過10年</span><br>
+                            <p class="leading-relaxed text-gray-700">電腦主機工廠 : 組裝機板生產線品管兩年經歷，認識每個零件及反面的電路板路線。<br>
+                            <span class="font-bold text-gray-900">中餐廳工作經歷兩年熟悉各項流程</span><br>
+                            <span class="font-bold text-gray-900">仲介業務超過10年</span><br>
                             長期深耕業務領域，具備優秀的銷售介紹產品能力與客戶應對經驗。</p>
                         </div>
                     </div>
@@ -88,8 +73,8 @@
 
                 <div>
                     <h2 class="text-2xl font-bold text-accent mb-6">自傳</h2>
-                    <div contenteditable="true" class="bg-black/20 p-6 rounded-lg text-sm leading-relaxed opacity-80">
-                        <p>我對電腦的組裝流程很熟悉，做了好幾年結婚才離職。後面開了中餐廳因為豬瘟的關係才收店，仲介的經歷是最長的做了10幾年。我適合應對各種客人。</p>
+                    <div contenteditable="true" class="bg-gray-50 p-6 rounded-lg text-sm leading-relaxed text-gray-700">
+                        <p>我對電腦的主機板組裝流程很熟悉，反面的銲錫、線路也很熟悉，做了好幾年的品管後來結婚才離職。開過中餐廳，因為豬瘟的關係才收店。仲介做了10幾年，因現在時機不是很好，客戶不好開發買賣雙方很難議價，所以想換工作，我可以配合工作時間。</p>
                     </div>
                 </div>
 
@@ -99,49 +84,37 @@
                         <img src="https://tanjiuping0225-prog.github.io/portfolio/excel.jpg" alt="Excel 專家證書" class="cert-img" crossorigin="anonymous">
                         <img src="https://tanjiuping0225-prog.github.io/portfolio/word.jpg" alt="Word 專家證書" class="cert-img" crossorigin="anonymous">
                         <img src="https://tanjiuping0225-prog.github.io/portfolio/111.jpg" alt="證照" class="cert-img" crossorigin="anonymous">
-                    </div>
-                </div>
-
-                <div>
-                    <h2 class="text-2xl font-bold text-accent mb-6">其他資訊</h2>
-                    <div class="bg-black/20 p-6 rounded-lg" contenteditable="true">
-                        <ul class="list-disc pl-5 space-y-2 text-sm">
-                            <li>美髮證照丙級</li>
-                            <li>中餐廚師證照丙級</li>
-                            <li>生成式 AI 應用專家</li>
-                            <li>數據處理與自動化</li>
-                        </ul>
+                        <img src="https://tanjiuping0225-prog.github.io/portfolio/222.jpg" alt="證件照" class="cert-img" crossorigin="anonymous">
                     </div>
                 </div>
             </div>
 
-            <!-- Right Column -->
             <div class="space-y-8">
                 <div>
                     <h2 class="text-xl font-bold text-accent mb-4">聯絡方法</h2>
-                    <div class="text-sm space-y-2" contenteditable="true">
+                    <div class="text-sm text-gray-700 space-y-2" contenteditable="true">
                         <p>📞 0926-891-609</p>
                         <p class="break-all">✉️ Tanjiuping0225@gmail.com</p>
                     </div>
                 </div>
 
                 <div>
-                    <h2 class="text-xl font-bold text-accent mb-4">核心專業</h2>
+                    <h2 class="text-xl font-bold text-accent mb-4">學習過</h2>
                     <div class="space-y-4" contenteditable="true">
-                        <div><p class="text-xs mb-1">生成式 AI 應用</p><div class="w-full bg-black/30 h-2 rounded-full"><div class="bg-accent h-2 rounded-full w-[90%]"></div></div></div>
-                        <div><p class="text-xs mb-1">數據處理與自動化</p><div class="w-full bg-black/30 h-2 rounded-full"><div class="bg-accent h-2 rounded-full w-[85%]"></div></div></div>
+                        <div><p class="text-xs mb-1 text-gray-600">生成式 AI 應用</p><div class="w-full bg-gray-200 h-2 rounded-full"><div class="bg-accent h-2 rounded-full w-[90%]"></div></div></div>
+                        <div><p class="text-xs mb-1 text-gray-600">數據處理與自動化</p><div class="w-full bg-gray-200 h-2 rounded-full"><div class="bg-accent h-2 rounded-full w-[85%]"></div></div></div>
                     </div>
                 </div>
 
                 <a href="https://course-use-kanban-production-b289.up.railway.app/" target="_blank" 
-                   class="block bg-black/20 p-4 rounded-xl border border-accent/20 transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:border-accent group">
+                   class="block bg-gray-50 p-4 rounded-xl border border-gray-200 transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:border-accent group">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-accent/10 rounded-lg group-hover:bg-accent group-hover:text-black transition-colors duration-300">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                        <div class="p-2 bg-accent/10 rounded-lg group-hover:bg-accent group-hover:text-white transition-colors duration-300">
+                            <svg class="w-6 h-6 text-accent group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                         </div>
                         <div>
                             <h3 class="font-bold text-accent">代辦事項規劃器</h3>
-                            <p class="text-xs opacity-70">管理個人工作進度的卡片式AI工具</p>
+                            <p class="text-xs text-gray-500">管理個人工作進度的卡片式AI工具</p>
                         </div>
                     </div>
                 </a>
@@ -150,12 +123,11 @@
     </div>
 
     <script>
-        // 依序嘗試多個 CDN，任一成功即解析；全失敗才 reject
         function loadScript(urls) {
             return new Promise((resolve, reject) => {
                 let i = 0;
                 (function tryNext() {
-                    if (i >= urls.length) return reject(new Error('函式庫載入失敗：' + urls.join(' , ')));
+                    if (i >= urls.length) return reject(new Error('函式庫載入失敗'));
                     const s = document.createElement('script');
                     s.src = urls[i++];
                     s.onload = () => resolve();
@@ -165,32 +137,19 @@
             });
         }
 
-        // 確保 html2canvas 與 jsPDF 都就緒（head 已先載，這裡是備援）
         async function ensureLibs() {
             if (typeof window.html2canvas !== 'function') {
-                await loadScript([
-                    'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
-                    'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js',
-                    'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
-                ]);
+                await loadScript(['https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js']);
             }
             if (!(window.jspdf && window.jspdf.jsPDF) && !window.jsPDF) {
-                await loadScript([
-                    'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js',
-                    'https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js',
-                    'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
-                ]);
+                await loadScript(['https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js']);
             }
         }
 
-        // 不論 UMD 把 jsPDF 掛在 window.jspdf.jsPDF 還是 window.jsPDF，都能取到
         function getJsPDF() {
-            const ctor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
-            if (typeof ctor !== 'function') throw new Error('jsPDF 未載入');
-            return ctor;
+            return (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
         }
 
-        // 等所有 <img> 載入完成（避免截到空白／破圖）
         function waitForImages(root) {
             const imgs = Array.from(root.querySelectorAll('img'));
             return Promise.all(imgs.map(img => {
@@ -206,53 +165,30 @@
             btn.disabled = true; btn.textContent = '產生中…';
 
             try {
-                await ensureLibs();   // 確保函式庫就緒（含備援 CDN）
-                // 截圖前：移除編輯游標外框、確保圖片與字型就緒
+                await ensureLibs();
                 if (document.activeElement) document.activeElement.blur();
                 await (document.fonts ? document.fonts.ready : Promise.resolve());
                 await waitForImages(card);
 
                 const canvas = await html2canvas(card, {
-                    scale: 2,                 // 高解析
-                    backgroundColor: '#1a1a1a',
+                    scale: 2,
+                    backgroundColor: '#ffffff',
                     useCORS: true,
-                    windowWidth: 1100         // 強制以桌面寬度排版 → 永遠三欄，即使在手機上點按鈕
+                    windowWidth: 1100
                 });
 
                 const jsPDF = getJsPDF();
                 const imgData = canvas.toDataURL('image/png');
-
-                // === 輸出模式（改這一個字即可切換）===
-                //   'a4-fit' : 單張標準 A4，等比縮放置中，可正常列印／投履歷（預設）
-                //   'exact'  : 單張，頁面尺寸=網頁原樣，零白邊、與螢幕完全等比
-                const PAGE_MODE = 'a4-fit';
-
-                let pdf, x = 0, y = 0, w, h;
-                if (PAGE_MODE === 'exact') {
-                    const orient = canvas.height >= canvas.width ? 'p' : 'l';
-                    pdf = new jsPDF({ orientation: orient, unit: 'px', format: [canvas.width, canvas.height] });
-                    w = canvas.width; h = canvas.height;
-                    pdf.addImage(imgData, 'PNG', 0, 0, w, h);
-                } else {
-                    pdf = new jsPDF('p', 'mm', 'a4');
-                    const pageW = pdf.internal.pageSize.getWidth();   // 210
-                    const pageH = pdf.internal.pageSize.getHeight();  // 297
-                    // 同時受寬與高限制 → 取較小縮放比，保證整份落在「單一頁」
-                    const ratio = Math.min(pageW / canvas.width, pageH / canvas.height);
-                    w = canvas.width * ratio;
-                    h = canvas.height * ratio;
-                    x = (pageW - w) / 2;
-                    y = (pageH - h) / 2;
-                    // 先把整頁填成深色底，縮放後的留白邊才不會是白色
-                    pdf.setFillColor(26, 26, 26); // #1a1a1a
-                    pdf.rect(0, 0, pageW, pageH, 'F');
-                    pdf.addImage(imgData, 'PNG', x, y, w, h);
-                }
-
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pageW = pdf.internal.pageSize.getWidth();
+                const pageH = pdf.internal.pageSize.getHeight();
+                const ratio = Math.min(pageW / canvas.width, pageH / canvas.height);
+                
+                pdf.addImage(imgData, 'PNG', (pageW - canvas.width * ratio) / 2, (pageH - canvas.height * ratio) / 2, canvas.width * ratio, canvas.height * ratio);
                 pdf.save('譚久平_個人簡歷.pdf');
             } catch (err) {
                 console.error(err);
-                alert('PDF 產生失敗，請確認在連網狀態下、且圖片已載入後再試一次。\n錯誤：' + err.message);
+                alert('PDF 產生失敗：' + err.message);
             } finally {
                 btn.disabled = false; btn.textContent = original;
             }
